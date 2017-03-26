@@ -1,22 +1,12 @@
 package com.github.binarywang.demo.wechat.config;
 
+import com.github.binarywang.demo.wechat.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.github.binarywang.demo.wechat.handler.AbstractHandler;
-import com.github.binarywang.demo.wechat.handler.KfSessionHandler;
-import com.github.binarywang.demo.wechat.handler.LocationHandler;
-import com.github.binarywang.demo.wechat.handler.LogHandler;
-import com.github.binarywang.demo.wechat.handler.MenuHandler;
-import com.github.binarywang.demo.wechat.handler.MsgHandler;
-import com.github.binarywang.demo.wechat.handler.NullHandler;
-import com.github.binarywang.demo.wechat.handler.StoreCheckNotifyHandler;
-import com.github.binarywang.demo.wechat.handler.SubscribeHandler;
-import com.github.binarywang.demo.wechat.handler.UnsubscribeHandler;
 
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -101,6 +91,10 @@ public class WechatMpConfiguration {
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
             .event(WxConsts.EVT_LOCATION).handler(this.getLocationHandler())
             .end();
+        // 上报地理位置事件
+        newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+            .event(WxConsts.EVT_LOCATION).handler(this.getLocationHandler())
+            .end();
 
         // 接收地理位置消息
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_LOCATION)
@@ -121,6 +115,9 @@ public class WechatMpConfiguration {
 
     @Autowired
     private MenuHandler menuHandler;
+
+    @Autowired
+    private ScanHandler scanHandler;
 
     @Autowired
     private MsgHandler msgHandler;
@@ -158,13 +155,12 @@ public class WechatMpConfiguration {
     protected AbstractHandler getLocationHandler() {
         return this.locationHandler;
     }
-
     protected MsgHandler getMsgHandler() {
         return this.msgHandler;
     }
 
     protected AbstractHandler getScanHandler() {
-        return null;
+        return scanHandler;
     }
 
 }
