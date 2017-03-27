@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public class JsonUtils {
     private static final ObjectMapper JSON = new ObjectMapper();
+
     static {
         JSON.setSerializationInclusion(Include.NON_NULL);
         JSON.configure(SerializationFeature.INDENT_OUTPUT, Boolean.TRUE);

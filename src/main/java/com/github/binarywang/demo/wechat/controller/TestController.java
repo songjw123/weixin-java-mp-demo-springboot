@@ -47,7 +47,7 @@ public class TestController {
     }
 
     //如果用户没有授权,则code为空,state在getWelcomeUrl()中指定
-    public void welcomePage(String code,String state) throws WxErrorException {
+    public void welcomePage(String code, String state) throws WxErrorException {
         //用户确认授权后,根据code获取access_token
         WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
 

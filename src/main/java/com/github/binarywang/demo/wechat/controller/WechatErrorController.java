@@ -1,9 +1,5 @@
 package com.github.binarywang.demo.wechat.controller;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +14,17 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 /**
  * @author 王彬 (Binary Wang)
- *
  */
 @Controller
 public class WechatErrorController implements ErrorController {
 
     private static final Logger logger = LoggerFactory
-        .getLogger(WechatErrorController.class);
+            .getLogger(WechatErrorController.class);
 
     private static WechatErrorController appErrorController;
 
@@ -40,7 +38,7 @@ public class WechatErrorController implements ErrorController {
 
     /**
      * Controller for the Error Controller
-     * 
+     *
      * @param errorAttributes
      */
 
@@ -56,16 +54,18 @@ public class WechatErrorController implements ErrorController {
 
     /**
      * Supports the HTML Error View
+     *
      * @param request
      */
     @RequestMapping(value = ERROR_PATH, produces = "text/html")
     public ModelAndView errorHtml(HttpServletRequest request) {
         return new ModelAndView("error",
-            this.getErrorAttributes(request, false));
+                this.getErrorAttributes(request, false));
     }
 
     /**
      * Supports other formats like JSON, XML
+     *
      * @param request
      */
     @RequestMapping(value = ERROR_PATH)
@@ -73,7 +73,7 @@ public class WechatErrorController implements ErrorController {
     public ResponseEntity<Map<String, Object>> error(
             HttpServletRequest request) {
         Map<String, Object> body = this.getErrorAttributes(request,
-            this.getTraceParameter(request));
+                this.getTraceParameter(request));
         HttpStatus status = this.getStatus(request);
         return new ResponseEntity<>(body, status);
     }
@@ -94,23 +94,23 @@ public class WechatErrorController implements ErrorController {
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest request,
-            boolean includeStackTrace) {
+                                                   boolean includeStackTrace) {
         RequestAttributes requestAttributes = new ServletRequestAttributes(
-            request);
+                request);
         Map<String, Object> map = this.errorAttributes
-            .getErrorAttributes(requestAttributes, includeStackTrace);
+                .getErrorAttributes(requestAttributes, includeStackTrace);
         logger.error("map is [{}]", map);
         String url = request.getRequestURL().toString();
         map.put("URL", url);
         logger.error("[error info]: status-{}, request url-{}",
-            map.get("status"), url);
+                map.get("status"), url);
         return map;
     }
 
     @SuppressWarnings("static-method")
     private HttpStatus getStatus(HttpServletRequest request) {
         Integer statusCode = (Integer) request
-            .getAttribute("javax.servlet.error.status_code");
+                .getAttribute("javax.servlet.error.status_code");
         if (statusCode != null) {
             return HttpStatus.valueOf(statusCode);
         }

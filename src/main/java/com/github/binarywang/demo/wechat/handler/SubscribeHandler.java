@@ -19,15 +19,15 @@ public class SubscribeHandler extends AbstractHandler {
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
-            Map<String, Object> context, WxMpService weixinService,
-            WxSessionManager sessionManager) throws WxErrorException {
+                                    Map<String, Object> context, WxMpService weixinService,
+                                    WxSessionManager sessionManager) throws WxErrorException {
 
         this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
 
         // 获取微信用户基本信息
         WxMpUser userWxInfo = weixinService.getUserService()
-            .userInfo(wxMessage.getFromUser(), null);
+                .userInfo(wxMessage.getFromUser(), null);
 
         if (userWxInfo != null) {
             // TODO 可以添加关注用户到本地
