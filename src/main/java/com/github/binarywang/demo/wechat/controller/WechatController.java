@@ -7,8 +7,9 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author Binary Wang
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class WechatController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private WxMpService wxService;
 
-    @Autowired
+    @Resource
     private WxMpMessageRouter router;
 
     @GetMapping(produces = "text/plain;charset=utf-8")
