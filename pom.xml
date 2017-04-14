@@ -32,7 +32,7 @@
         </repository>
     </repositories>
     <properties>
-        <weixin-java-mp.version>2.5.1.BETA</weixin-java-mp.version>
+        <weixin-java-mp.version>2.5.7.BETA</weixin-java-mp.version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
