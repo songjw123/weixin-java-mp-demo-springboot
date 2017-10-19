@@ -1,0 +1,40 @@
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.github.binarywang.demo.wechat: DEBUG
+
+wechat:
+  mp:
+    appId: wxb194be81cd4e756a
+    secret: 4247bbfa6048c77fc7ace8ad8821e96f
+    token: songjiawei
+    aesKey:
+    
+#配置数据源
+spring:
+  datasource:
+    name: test
+    url: jdbc:mysql://127.0.0.1:3306/weixin_info
+    username: root
+    password: 1234
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    
+ #设置mybatis的mapper和model扫描路径：
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  typeAliasesPackage: com.github.binarywang.demo.wechat.model
