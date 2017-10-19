@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * @author Binary Wang
+ * @author Binary Wang(https://github.com/binarywang)
  */
 @Component
 public class MenuHandler extends AbstractHandler {

@@ -7,22 +7,21 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-
 /**
- * @author Binary Wang
+ * @author Binary Wang(https://github.com/binarywang)
  */
 @RestController
 @RequestMapping("/wechat/portal")
 public class WechatController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
+    @Autowired
     private WxMpService wxService;
 
-    @Resource
+    @Autowired
     private WxMpMessageRouter router;
 
     @GetMapping(produces = "text/plain;charset=utf-8")

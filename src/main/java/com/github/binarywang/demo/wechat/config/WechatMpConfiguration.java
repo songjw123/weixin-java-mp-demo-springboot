@@ -6,7 +6,7 @@ import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+import me.chanjar.weixin.mp.constant.WxMpEventConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,14 +17,32 @@ import org.springframework.context.annotation.Configuration;
 /**
  * wechat mp configuration
  *
- * @author Binary Wang
+ * @author Binary Wang(https://github.com/binarywang)
  */
 @Configuration
 @ConditionalOnClass(WxMpService.class)
 @EnableConfigurationProperties(WechatMpProperties.class)
 public class WechatMpConfiguration {
     @Autowired
+    protected LogHandler logHandler;
+    @Autowired
+    protected NullHandler nullHandler;
+    @Autowired
+    protected KfSessionHandler kfSessionHandler;
+    @Autowired
+    protected StoreCheckNotifyHandler storeCheckNotifyHandler;
+    @Autowired
     private WechatMpProperties properties;
+    @Autowired
+    private LocationHandler locationHandler;
+    @Autowired
+    private MenuHandler menuHandler;
+    @Autowired
+    private MsgHandler msgHandler;
+    @Autowired
+    private UnsubscribeHandler unsubscribeHandler;
+    @Autowired
+    private SubscribeHandler subscribeHandler;
 
     @Bean
     @ConditionalOnMissingBean
@@ -40,7 +58,10 @@ public class WechatMpConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public WxMpService wxMpService(WxMpConfigStorage configStorage) {
-        WxMpService wxMpService = new WxMpServiceImpl();
+//        WxMpService wxMpService = new me.chanjar.weixin.mp.api.impl.okhttp.WxMpServiceImpl();
+//        WxMpService wxMpService = new me.chanjar.weixin.mp.api.impl.jodd.WxMpServiceImpl();
+//        WxMpService wxMpService = new me.chanjar.weixin.mp.api.impl.apache.WxMpServiceImpl();
+        WxMpService wxMpService = new me.chanjar.weixin.mp.api.impl.WxMpServiceImpl();
         wxMpService.setWxMpConfigStorage(configStorage);
         return wxMpService;
     }
@@ -54,18 +75,19 @@ public class WechatMpConfiguration {
 
         // 接收客服会话管理事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_KF_CREATE_SESSION)
+                .event(WxMpEventConstants.CustomerService.KF_CREATE_SESSION)
                 .handler(this.kfSessionHandler).end();
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_KF_CLOSE_SESSION).handler(this.kfSessionHandler)
+                .event(WxMpEventConstants.CustomerService.KF_CLOSE_SESSION)
+                .handler(this.kfSessionHandler)
                 .end();
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_KF_SWITCH_SESSION)
+                .event(WxMpEventConstants.CustomerService.KF_SWITCH_SESSION)
                 .handler(this.kfSessionHandler).end();
 
         // 门店审核事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_POI_CHECK_NOTIFY)
+                .event(WxMpEventConstants.POI_CHECK_NOTIFY)
                 .handler(this.storeCheckNotifyHandler).end();
 
         // 自定义菜单事件
@@ -90,10 +112,6 @@ public class WechatMpConfiguration {
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
                 .event(WxConsts.EVT_LOCATION).handler(this.getLocationHandler())
                 .end();
-        // 上报地理位置事件
-        newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_LOCATION).handler(this.getLocationHandler())
-                .end();
 
         // 接收地理位置消息
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_LOCATION)
@@ -108,36 +126,6 @@ public class WechatMpConfiguration {
 
         return newRouter;
     }
-
-    @Autowired
-    private LocationHandler locationHandler;
-
-    @Autowired
-    private MenuHandler menuHandler;
-
-    @Autowired
-    private ScanHandler scanHandler;
-
-    @Autowired
-    private MsgHandler msgHandler;
-
-    @Autowired
-    protected LogHandler logHandler;
-
-    @Autowired
-    protected NullHandler nullHandler;
-
-    @Autowired
-    protected KfSessionHandler kfSessionHandler;
-
-    @Autowired
-    protected StoreCheckNotifyHandler storeCheckNotifyHandler;
-
-    @Autowired
-    private UnsubscribeHandler unsubscribeHandler;
-
-    @Autowired
-    private SubscribeHandler subscribeHandler;
 
     protected MenuHandler getMenuHandler() {
         return this.menuHandler;
@@ -160,7 +148,7 @@ public class WechatMpConfiguration {
     }
 
     protected AbstractHandler getScanHandler() {
-        return scanHandler;
+        return null;
     }
 
 }
